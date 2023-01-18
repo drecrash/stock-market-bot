@@ -18,8 +18,12 @@
         }
     },
     "551386910392713226": {
-        "shares": {},
-        "balance": 0,
-        "companies": {}
+        "shares": {
+            "Bank": 100
+        },
+        "balance": 9900,
+        "companies": {
+            "Bank": 1
+        }
     }
 }

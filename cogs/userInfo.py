@@ -126,28 +126,48 @@ class userInfo(commands.Cog):
         portfolioStartEmb = nextcord.Embed(title=f"{member_name}'s Portfolio", description=f"{member_name}'s balance, shares, and companies", color=nextcord.Color.blurple())
         portfolioStartEmb.add_field(name="Balance:",value=f"${balance}")
 
-        first_message = await channel.send(embed=portfolioStartEmb)
+        sharesString = ''
+        companyString = ''
+        allCompanies = list(userData[str(member.id)]["companies"].keys())
 
-        if userData[str(member.id)]["shares"] == {}:
-            second_message = await first_message.reply(f"{member_name} has not invested in any companies")
-        else:
-            shareEmb = nextcord.Embed(title=f"{member_name}'s Shares", description=f"Companies {member_name} has invested in", color=nextcord.Color.blurple())
+        for key, value in userData[str(member.id)]["shares"].items():
+            sharesString += f'• {key}: {value} shares \n'
 
-            for key, value in userData[str(member.id)]["shares"].items():
-                shareEmb.add_field(name=f"{key}:", value=f"{value} shares")        
+        for i in range(len(allCompanies)):
+            companyString += f'• {allCompanies[i]} \n'
+
+
+        portfolioStartEmb.add_field(name="Shares: ",value=sharesString)
+        portfolioStartEmb.add_field(name=f"{member_name}'s Companies: ",value=companyString)
+
+        await interaction.response.send_message(embed = portfolioStartEmb)
+
+     
+        
+        # second_message = await first_message.reply(embed=shareEmb)
+
+        # first_message = await channel.send(embed=portfolioStartEmb)
+
+        # if userData[str(member.id)]["shares"] == {}:
+        #     second_message = await first_message.reply(f"{member_name} has not invested in any companies")
+        # else:
+        #     shareEmb = nextcord.Embed(title=f"{member_name}'s Shares", description=f"Companies {member_name} has invested in", color=nextcord.Color.blurple())
+
+        #     for key, value in userData[str(member.id)]["shares"].items():
+        #         shareEmb.add_field(name=f"{key}:", value=f"{value} shares")        
             
-            second_message = await first_message.reply(embed=shareEmb)
+        #     second_message = await first_message.reply(embed=shareEmb)
 
-        if userData[str(member.id)]["companies"] != {}:
-            companyEmb = nextcord.Embed(title=f"{member_name}'s Companies", description=f"Companies {member_name} has made public", color=nextcord.Color.blurple())
+        # if userData[str(member.id)]["companies"] != {}:
+        #     companyEmb = nextcord.Embed(title=f"{member_name}'s Companies", description=f"Companies {member_name} has made public", color=nextcord.Color.blurple())
 
-            allCompanies = list(userData[str(member.id)]["companies"].keys())
+        #     allCompanies = list(userData[str(member.id)]["companies"].keys())
 
-            for i in range(len(allCompanies)):
-                companyEmb.add_field(name=allCompanies[i], value="\u200b")
+        #     for i in range(len(allCompanies)):
+        #         companyEmb.add_field(name=allCompanies[i], value="\u200b")
 
 
-            last_message = await second_message.reply(embed = companyEmb)
+        #     last_message = await second_message.reply(embed = companyEmb)
 
     @nextcord.slash_command(name = "deposit-money", description = "Deposit money to a user")
     async def depositmoney(self, interaction: Interaction, member: nextcord.User, amount):

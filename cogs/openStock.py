@@ -106,27 +106,33 @@ class openStock(commands.Cog):
                 await interaction.response.send_message("Your company is already registered")
 
             else:
-                data[str(guild.id)][name] = {}
-                data[str(guild.id)][name]["percentage"] = float(percentage)
-                data[str(guild.id)][name]["ipo"] = int(round(float(ipo)))
-                data[str(guild.id)][name]["owner"] = str(owner.id)
-                data[str(guild.id)][name]["price"] = int(round(float(ipo)))
-                
-                userData[str(owner.id)]["companies"][name] = 1
 
-                sellData[name] = {}
-                sellData[name][str(owner.id)] = [total_shares_sold,ipo]
+                if total_shares_sold <= 1:
+                    await interaction.response.send_message("Percentage sold is less than minimum amount, please sell more")
+                else:
 
-                with open("company_data.json", "w") as f:
-                    json.dump(data,f, indent=4)
+                    data[str(guild.id)][name] = {}
+                    data[str(guild.id)][name]["percentage"] = float(percentage)
+                    data[str(guild.id)][name]["ipo"] = int(round(float(ipo)))
+                    data[str(guild.id)][name]["owner"] = str(owner.id)
+                    data[str(guild.id)][name]["price"] = int(round(float(ipo)))
+                    
+                    userData[str(owner.id)]["companies"][name] = 1
+                    userData[str(owner.id)]["shares"][name] = 1
 
-                with open("user_data.json", "w") as f:
-                    json.dump(userData,f, indent=4)
+                    sellData[name] = {}
+                    sellData[name][str(owner.id)] = [total_shares_sold-1,ipo]
 
-                with open("sell_orders.json", "w") as f:
-                    json.dump(sellData,f, indent=4)
+                    with open("company_data.json", "w") as f:
+                        json.dump(data,f, indent=4)
 
-                await interaction.response.send_message(f'The company "{name.capitalize()}" has been registered with {percentage}% of the company being sold. \nThe IPO price is ${ipo} \nMade a sell order for: {total_shares_sold} shares\nTotal cost: {total_cost}')
+                    with open("user_data.json", "w") as f:
+                        json.dump(userData,f, indent=4)
+
+                    with open("sell_orders.json", "w") as f:
+                        json.dump(sellData,f, indent=4)
+
+                    await interaction.response.send_message(f'The company "{name.capitalize()}" has been registered with {percentage}% of the company being sold. \nThe IPO price is ${ipo} \nMade a sell order for: {total_shares_sold} shares\nTotal cost: {total_cost}')
 
         else:
             pass

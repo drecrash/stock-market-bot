@@ -1,2 +1,6 @@
 /.env
 /credentials.json
+cogs/__pycache__/buyAndSell.cpython-310.pyc
+cogs/__pycache__/openStock.cpython-310.pyc
+cogs/__pycache__/spreadsheetData.cpython-310.pyc
+cogs/__pycache__/userInfo.cpython-310.pyc

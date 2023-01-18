@@ -870,16 +870,20 @@ class buysell(commands.Cog):
             lowest_sell = await self.find_lowest_sell(key)
             highest_buy = await self.find_highest_buy(key)
 
-            sheet_sell_list = list(sellData[company].keys())
-            sheet_buy_list = list(buyData[company].keys())
-            
 
             
 
             if lowest_sell == False:
                 lowest_sell = [None,0]
+                sheet_sell_list = []
+            else:
+                sheet_sell_list = list(sellData[company].keys())
+
             if highest_buy == False:
                 highest_buy = [None,0]
+                sheet_buy_list = []
+            else:
+                sheet_buy_list = list(buyData[company].keys())
 
 
             sheet.append_row([company, highest_buy[1], lowest_sell[1], str(len(sheet_buy_list)), str(len(sheet_sell_list))])
@@ -894,30 +898,39 @@ class buysell(commands.Cog):
         
         if message_exist == False:
             company_string = ''
-            company_string += 'Company Name - Highest Buy - Lowest Sell - Total Buy - Total Sell\n'
+            company_string += 'Company Name - Highest Buy - Lowest Sell - Total Buy - Total Sell\n\n'
 
             for i in range(len(company_list)):
 
                 print(company_list[i])
 
-                if lowest_sell == False:
-                    lowest_sell = [None,0]
-                if highest_buy == False:
-                    highest_buy = [None,0]
-
                 lowest_sell = await self.find_lowest_sell(company_list[i])
                 highest_buy = await self.find_highest_buy(company_list[i])
+
+                if lowest_sell == False:
+                    lowest_sell = [None,0]
+                    sheet_sell_list = []
+                else:
+                    sheet_sell_list = list(sellData[company].keys())
+
+                if highest_buy == False:
+                    highest_buy = [None,0]
+                    sheet_buy_list = []
+                else:
+                    sheet_buy_list = list(buyData[company].keys())
+
+
 
                 msg_sell_list = list(sellData[company].keys())
                 msg_buy_list = list(buyData[company].keys())                
                 
-                company_string += f'{(company_list[i]).capitalize()} - {highest_buy[1]} - {lowest_sell[1]} - {str(len(msg_buy_list))} - {str(len(sheet_sell_list))}\n'
+                company_string += f'{(company_list[i]).capitalize()} - {highest_buy[1]} - {lowest_sell[1]} - {str(len(msg_buy_list))} - {str(len(msg_sell_list))}\n'
 
             await channel.send(company_string)
 
         elif message_exist == True:
             company_string = ''
-            company_string += 'Company Name - Highest Buy - Lowest Sell\n\n'
+            company_string += 'Company Name - Highest Buy - Lowest Sell - Total Buy - Total Sell\n\n'
 
 
 
@@ -930,10 +943,18 @@ class buysell(commands.Cog):
 
                 if lowest_sell == False:
                     lowest_sell = [None,0]
+                    msg_sell_list = []
+                else:
+                    msg_sell_list = list(sellData[company].keys())
+
                 if highest_buy == False:
                     highest_buy = [None,0]
+                    msg_buy_list = []
+                else:
+                    msg_buy_list = list(buyData[company].keys())
 
-                company_string += f'{(company_list[i]).capitalize()} - {highest_buy[1]} - {lowest_sell[1]}\n'
+
+                company_string += f'{(company_list[i]).capitalize()} - {highest_buy[1]} - {lowest_sell[1]} - {str(len(msg_buy_list))} - {str(len(msg_sell_list))}\n'
 
             await message_thing.edit(company_string)
 

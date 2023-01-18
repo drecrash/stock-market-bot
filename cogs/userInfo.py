@@ -133,10 +133,10 @@ class userInfo(commands.Cog):
         allCompanies = list(userData[str(member.id)]["companies"].keys())
 
         for key, value in userData[str(member.id)]["shares"].items():
-            sharesString += f'• {key}: {value} shares \n'
+            sharesString += f'• {key.capitalize()}: {value} shares \n'
 
         for i in range(len(allCompanies)):
-            companyString += f'• {allCompanies[i]} \n'
+            companyString += f'• {(allCompanies[i]).capitalize()} \n'
 
 
         portfolioStartEmb.add_field(name="Shares: ",value=sharesString)

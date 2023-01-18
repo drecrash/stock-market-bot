@@ -93,6 +93,7 @@ class openStock(commands.Cog):
         self.open_user(owner)
         user_company_list = userData[str(owner.id)]["companies"]
         worth_per_share = 0.0001
+        name = name.lower()
 
         percentage = float(percentage)
         ipo = int(ipo)
@@ -125,7 +126,7 @@ class openStock(commands.Cog):
                 with open("sell_orders.json", "w") as f:
                     json.dump(sellData,f, indent=4)
 
-                await interaction.response.send_message(f'The company "{name}" has been registered with {percentage}% of the company being sold. The IPO price is ${ipo} \nMade a sell order for: {total_shares_sold} shares\nTotal cost: {total_cost}')
+                await interaction.response.send_message(f'The company "{name.capitalize()}" has been registered with {percentage}% of the company being sold. \nThe IPO price is ${ipo} \nMade a sell order for: {total_shares_sold} shares\nTotal cost: {total_cost}')
 
         else:
             pass

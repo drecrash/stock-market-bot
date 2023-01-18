@@ -82,6 +82,7 @@ class userInfo(commands.Cog):
         user = (interaction.user)
         self.open_user(user)
         serverData = self.get_server_data()
+        self.open_company_data(guild)
 
         if user.guild_permissions.administrator:
             serverData[str(guild.id)]['officer'] = str(role.name)
@@ -101,6 +102,7 @@ class userInfo(commands.Cog):
         user = (interaction.user)
         self.open_user(user)
         serverData = self.get_server_data()
+        self.open_company_data(guild)
 
         if user.guild_permissions.administrator:
             serverData[str(guild.id)]['channel'] = channel.id

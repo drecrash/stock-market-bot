@@ -8,6 +8,7 @@ import random
 from random import randrange
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import difflib
 
 
 
@@ -56,8 +57,9 @@ class buysell(commands.Cog):
         else:
             return False
 
-        with open("user_data.json", "w") as f:
+        with open("user_data.json", "w") as f: 
             json.dump(data,f, indent=4)
+
 
 
     async def give_money(self, user, company_name, shares, cost):
@@ -136,6 +138,7 @@ class buysell(commands.Cog):
         failedExchange = False
         fullCost = 0
         money_error = False
+        company_name = company_name.lower()
 
         await interaction.response.defer()
 
@@ -303,7 +306,8 @@ class buysell(commands.Cog):
         failedExchange = False
         fullCost = 0
         user_balance = userData[str(user.id)]["balance"]
-        share_error = False        
+        share_error = False
+        company_name = company_name.lower()
 
 
         if company_name not in companyData[str(guild.id)]:
@@ -600,6 +604,7 @@ class buysell(commands.Cog):
         continue_function = True
         channel = (interaction.channel)
         custom_message = False
+        company_name = company_name.lower()
 
         print(cost_per_share)
 
@@ -700,6 +705,7 @@ class buysell(commands.Cog):
         user_balance = userData[str(user.id)]["balance"]
         channel = (interaction.channel)
         custom_message = False
+        company_name = company_name.lower()
 
         if not shares.isdigit():
             await interaction.response.send_message("Invalid shares, please enter a number")
@@ -797,6 +803,7 @@ class buysell(commands.Cog):
         guild = (interaction.guild)
         user = (interaction.user)
         self.open_user(user)
+        company_name = company_name.lower()
 
         if company_name not in sellData:
             await interaction.response.send_message("The company that you have entered is not a valid company, please open a ticket to validate a company")
@@ -826,6 +833,7 @@ class buysell(commands.Cog):
         guild = (interaction.guild)
         user = (interaction.user)
         self.open_user(user)
+        company_name = company_name.lower()
 
         if company_name not in buyData:
             await interaction.response.send_message("The company that you have entered is not a valid company, please open a ticket to validate a company")
@@ -852,13 +860,19 @@ class buysell(commands.Cog):
         sheet.clear()
         message_exist = False
         message_thing = None
+        sellData = self.get_sell_data()
+        buyData = self.get_buy_data()
 
-        sheet.append_row(['Company Name','Highest Buy','Lowest Sell'])
+        sheet.append_row(['Company Name','Highest Buy','Lowest Sell','Total Buy','Total Sell'])
 
         for key in company_list:
             company = key
             lowest_sell = await self.find_lowest_sell(key)
             highest_buy = await self.find_highest_buy(key)
+
+            sheet_sell_list = list(sellData[company].keys())
+            sheet_buy_list = list(buyData[company].keys())
+            
 
             
 
@@ -868,7 +882,7 @@ class buysell(commands.Cog):
                 highest_buy = [None,0]
 
 
-            sheet.append_row([company, highest_buy[1], lowest_sell[1]])
+            sheet.append_row([company, highest_buy[1], lowest_sell[1], str(len(sheet_buy_list)), str(len(sheet_sell_list))])
 
         channel = self.client.get_channel(channel_id)
 
@@ -880,7 +894,7 @@ class buysell(commands.Cog):
         
         if message_exist == False:
             company_string = ''
-            company_string += 'Company Name - Highest Buy - Lowest Sell\n'
+            company_string += 'Company Name - Highest Buy - Lowest Sell - Total Buy - Total Sell\n'
 
             for i in range(len(company_list)):
 
@@ -893,8 +907,11 @@ class buysell(commands.Cog):
 
                 lowest_sell = await self.find_lowest_sell(company_list[i])
                 highest_buy = await self.find_highest_buy(company_list[i])
+
+                msg_sell_list = list(sellData[company].keys())
+                msg_buy_list = list(buyData[company].keys())                
                 
-                company_string += f'{company_list[i]} - {highest_buy[1]} - {lowest_sell[1]}\n'
+                company_string += f'{(company_list[i]).capitalize()} - {highest_buy[1]} - {lowest_sell[1]} - {str(len(msg_buy_list))} - {str(len(sheet_sell_list))}\n'
 
             await channel.send(company_string)
 
@@ -916,7 +933,7 @@ class buysell(commands.Cog):
                 if highest_buy == False:
                     highest_buy = [None,0]
 
-                company_string += f'{company_list[i]} - {highest_buy[1]} - {lowest_sell[1]}\n'
+                company_string += f'{(company_list[i]).capitalize()} - {highest_buy[1]} - {lowest_sell[1]}\n'
 
             await message_thing.edit(company_string)
 

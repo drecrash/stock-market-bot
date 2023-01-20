@@ -1,3 +1,7 @@
+# Copyright 2022 Andre Prakash
+
+
+
 import nextcord     
 from nextcord.ext import commands
 from nextcord import Interaction
@@ -584,11 +588,6 @@ class buysell(commands.Cog):
                     await self.single_sell_order_match(all_users, companyList[i])
 
 
-
-    @nextcord.slash_command(name = "testsellorder", description = "test sell order")
-    async def testsellorder(self, interaction: Interaction):
-        guild = (interaction.guild)
-        await self.match_sell_orders(guild)
 
 
 

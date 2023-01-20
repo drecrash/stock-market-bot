@@ -16,7 +16,7 @@ getvar()
 intents = nextcord.Intents.all()
 client = commands.Bot(command_prefix='!', intents=intents)
 
-os.chdir(os.getenv('cogs_path'))
+os.chdir(os.getenv('bot_path'))
 
 initial_extentions = []
 

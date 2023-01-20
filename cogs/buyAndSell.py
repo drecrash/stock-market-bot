@@ -1,7 +1,3 @@
-# Copyright 2022 Andre Prakash
-
-
-
 import nextcord     
 from nextcord.ext import commands
 from nextcord import Interaction

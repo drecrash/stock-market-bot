@@ -975,7 +975,7 @@ class buysell(commands.Cog):
                 creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
                 client2 = gspread.authorize(creds)
 
-                spreadsheet = client2.open("Blitio Stock Market Bot").sheet1
+                spreadsheet = client2.open(serverData[str(guild.id)]['sheet']).sheet1
 
                 print('sheet')
 

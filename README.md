@@ -9,6 +9,8 @@ This is a Discord bot that somewhat simulates a stock market in your server
           * This command will define the role that will be allowed to deposit money, withdraw money, respond to tickets, register companies, and close tickets
      * /define-stocks-channel [channel]
           * This command will define the channel that the instant buy and instant sell prices of companies will go to
+     * /define-spreadsheet-name [name]
+          * This command will define the name of the spreadsheet that is updated
      * /opencompanyticket
           * Run this in a dedicated channel, this will generate a message with a button that can be used to open tickets
 * Follow [this tutorial](https://youtu.be/wrR0YLzh4DQ/ "Tutorial link title") from 0:00 to 5:20 . Rename the json file ‘credentials.json’ and put it in the folder with main.py (not the cogs folder). This will allow the bot to write data into a Google spreadsheet of your choice

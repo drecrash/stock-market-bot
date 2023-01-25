@@ -56,6 +56,7 @@ class userInfo(commands.Cog):
             serverData[str(guild.id)] = {}  
             serverData[str(guild.id)]['officer'] = None
             serverData[str(guild.id)]['channel'] = None
+            serverData[str(guild.id)]['sheet'] = None
 
             with open("server_data.json", "w") as f:
                 json.dump(serverData,f, indent=4)
@@ -117,6 +118,25 @@ class userInfo(commands.Cog):
         else:
             await interaction.response.send_message("This command is only available to those with admin permissions")
 
+
+    @nextcord.slash_command(name = "define-spreadsheet-name", description = "Define the name of your spreadsheet")
+    async def sheetname(self, interaction: Interaction, name):
+        guild = (interaction.guild)
+        self.open_server(guild)
+        user = (interaction.user)
+        self.open_user(user)
+        serverData = self.get_server_data()
+        self.open_company_data(guild)
+
+        if user.guild_permissions.administrator:
+            serverData[str(guild.id)]['sheet'] = name
+            await interaction.response.send_message(f"Assigned the spreadsheet name to {name}")
+
+            with open("server_data.json", "w") as f:
+                json.dump(serverData,f, indent=4)
+
+        else:
+            await interaction.response.send_message("This command is only available to those with admin permissions")
 
 
 
